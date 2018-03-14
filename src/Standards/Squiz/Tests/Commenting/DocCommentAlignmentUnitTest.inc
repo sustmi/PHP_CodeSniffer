@@ -81,3 +81,18 @@ class MyClass2
  * Example with no errors.
  **************************************************************************/
 function example() {}
+
+/**
+ * @ORM\Entity()
+ * @ORM\Table(
+ *     name="table_name",
+ *     indexes={
+ *         @ORM\Index(columns={"my_column"}),
+ *         @ORM\Index(columns={"my_column2"})
+ *     }
+ * )
+ */
+class MyClass
+{
+
+}
