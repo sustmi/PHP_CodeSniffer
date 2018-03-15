@@ -135,21 +135,26 @@ class DocCommentAlignmentSniff implements Sniff
             }
 
             if ($tokens[($i + 1)]['code'] !== T_DOC_COMMENT_WHITESPACE) {
-                $error = 'Expected 1 space after asterisk; 0 found';
+                $error = 'Expected at least 1 space after asterisk; 0 found';
                 $fix   = $phpcsFile->addFixableError($error, $i, 'NoSpaceAfterStar');
                 if ($fix === true) {
                     $phpcsFile->fixer->addContent($i, ' ');
                 }
-            } else if ($tokens[($i + 2)]['code'] === T_DOC_COMMENT_TAG
-                && $tokens[($i + 1)]['content'] !== ' '
-            ) {
-                $error = 'Expected 1 space after asterisk; %s found';
-                $data  = [strlen($tokens[($i + 1)]['content'])];
-                $fix   = $phpcsFile->addFixableError($error, $i, 'SpaceAfterStar', $data);
-                if ($fix === true) {
-                    $phpcsFile->fixer->replaceToken(($i + 1), ' ');
+            } else {
+                // Note: Doctrine annotations (tags with an opening brace after identifier)
+                // can be indented by more than one space.
+                if ($tokens[($i + 2)]['code'] === T_DOC_COMMENT_TAG
+                    && preg_match('/@[^\(]+\(/', $tokens[($i + 2)]['content']) === 0
+                    && ($tokens[($i + 1)]['content'] !== ' ')
+                ) {
+                    $error = 'Expected 1 space between asterisk and tag; %s found';
+                    $data  = [strlen($tokens[($i + 1)]['content'])];
+                    $fix   = $phpcsFile->addFixableError($error, $i, 'SpaceAfterStar', $data);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken(($i + 1), ' ');
+                    }
                 }
-            }
+            }//end if
         }//end for
 
     }//end process()

@@ -83,7 +83,7 @@ class MyClass2
 function example() {}
 
 /**
- * @ORM\Entity()
+ *@ORM\Entity()
  * @ORM\Table(
  *     name="table_name",
  *     indexes={

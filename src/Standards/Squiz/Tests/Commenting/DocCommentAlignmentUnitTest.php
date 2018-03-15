@@ -45,6 +45,7 @@ class DocCommentAlignmentUnitTest extends AbstractSniffUnitTest
 
         if ($testFile === 'DocCommentAlignmentUnitTest.inc') {
             $errors[75] = 1;
+            $errors[86] = 1;
         }
 
         return $errors;
